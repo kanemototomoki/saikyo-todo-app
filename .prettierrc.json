@@ -1,0 +1,16 @@
+{
+  "tabWidth": 2,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "semi": false,
+  "useTabs": false,
+  "importOrder": [
+    "^(react/(.*)$)|^(react$)",
+    "<THIRD_PARTY_MODULES>",
+    "^types$",
+    "^@src/config/(.*)$",
+    "^@src/lib/(.*)$",
+    "^@src/components/(.*)$",
+    "^[./]"
+  ]
+}
