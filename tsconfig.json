@@ -20,6 +20,6 @@
       "@src/*": ["src/*"]
     }
   },
-  "include": ["src", "jest.setup.ts"],
+  "include": ["src","vite.config.ts", "jest.setup.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
