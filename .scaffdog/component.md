@@ -11,7 +11,7 @@ questions:
 # `{{ inputs.name | pascal }}/index.tsx`
 ```tsx
 export type Props = {}
-export default function {{ inputs.name | pascal }}({}: Props) {
+export default function {{ inputs.name | pascal }}() {
   return (
     <>
       <h1>{{ inputs.name | pascal }}</h1>
@@ -22,7 +22,7 @@ export default function {{ inputs.name | pascal }}({}: Props) {
 
 # `{{ inputs.name | pascal }}/index.stories.tsx`
 ```tsx
-import { Meta, StoryObj } from '@storybook/react'
+import { type Meta, type StoryObj } from '@storybook/react'
 import {{ inputs.name | pascal }} from '.';
 
 const meta = {

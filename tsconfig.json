@@ -17,9 +17,10 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"]
+      "@src/*": ["src/*"],
+      "@functions/*": ["functions/*"]
     }
   },
-  "include": ["src","vite.config.ts", "jest.setup.ts"],
+  "include": ["src", "functions", "vite.config.ts", "jest.setup.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

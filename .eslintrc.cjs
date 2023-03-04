@@ -39,9 +39,22 @@ module.exports = {
   ],
   ignorePatterns: ['*.js', '*.cjs', '**/vite-env.d.ts', '**/stories/*'],
   rules: {
-    'react/react-in-jsx-scope': 'off',
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
-    '@typescript-eslint/explicit-function-return-type': 'off'
+    'react/react-in-jsx-scope': 0,
+    'react-hooks/rules-of-hooks': 2,
+    'react-hooks/exhaustive-deps': 1,
+    '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/consistent-type-definitions': 0,
+    '@typescript-eslint/ban-types': 0,
+    // submitでエラーになるから設定
+    '@typescript-eslint/no-misused-promises': [
+      2,
+      {
+        checksVoidReturn: {
+          attributes: false
+        }
+      }
+    ],
+    '@typescript-eslint/no-unsafe-assignment': 0,
+    '@typescript-eslint/no-unsafe-call': 0
   }
 }
