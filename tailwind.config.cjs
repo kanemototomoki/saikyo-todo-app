@@ -8,6 +8,9 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-sans)', ...fontFamily.sans]
       },
+      height: {
+        screen: ['100vh', '100svh']
+      },
       keyframes: {
         'accordion-down': {
           from: { height: 0 },
@@ -24,5 +27,8 @@ module.exports = {
       }
     }
   },
-  plugins: [require('tailwindcss-animate')]
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/container-queries')
+  ]
 }

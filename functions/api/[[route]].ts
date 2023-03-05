@@ -4,7 +4,9 @@ import { z } from 'zod'
 
 const app = new Hono()
 export const schema = z.object({
-  title: z.coerce.string().trim().min(1).max(50),
+  title: z.coerce.string().trim().min(1, {
+    message: 'Task is required'
+  }).max(50),
   // dueDate: z.date(),
   // isDone: z.boolean()
   dueDate: z.string().datetime(),
