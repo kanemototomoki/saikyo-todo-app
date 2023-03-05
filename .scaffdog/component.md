@@ -1,14 +1,15 @@
 ---
 name: 'component'
 description: 'Generate React Component'
-root: './src/components'
-output: '**/*'
+root: './src/client/'
+output: 'components/*'
 ignore: []
 questions:
   name: 'Please enter component name'
 ---
 
 # `{{ inputs.name | pascal }}/index.tsx`
+
 ```tsx
 export type Props = {}
 export default function {{ inputs.name | pascal }}() {
@@ -21,6 +22,7 @@ export default function {{ inputs.name | pascal }}() {
 ```
 
 # `{{ inputs.name | pascal }}/index.stories.tsx`
+
 ```tsx
 import { type Meta, type StoryObj } from '@storybook/react'
 import {{ inputs.name | pascal }} from '.';
@@ -43,6 +45,7 @@ export const Primary: Story = {
 ```
 
 # `{{ inputs.name | pascal }}/index.test.tsx`
+
 ```tsx
 import {{ inputs.name | pascal }} from '.'
 import { render, screen } from '@testing-library/react'

@@ -1,7 +1,7 @@
 ---
 name: 'page'
 description: 'Generate React page'
-root: './src'
+root: './src/client/'
 output: 'page/*'
 ignore: []
 questions:
@@ -9,6 +9,7 @@ questions:
 ---
 
 # `{{ inputs.name | pascal }}/index.tsx`
+
 ```tsx
 export type Props = {}
 export default function {{ inputs.name | pascal }}() {
@@ -21,6 +22,7 @@ export default function {{ inputs.name | pascal }}() {
 ```
 
 # `{{ inputs.name | pascal }}/index.stories.tsx`
+
 ```tsx
 import { type Meta, type StoryObj } from '@storybook/react'
 import {{ inputs.name | pascal }} from '.';
@@ -43,6 +45,7 @@ export const Primary: Story = {
 ```
 
 # `{{ inputs.name | pascal }}/index.test.tsx`
+
 ```tsx
 import {{ inputs.name | pascal }} from '.'
 import { render, screen } from '@testing-library/react'

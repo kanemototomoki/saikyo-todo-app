@@ -1,11 +1,12 @@
-import { schema } from '@functions/api/[[route]]'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { type z } from 'zod'
-import { cn } from '@src/lib/utils'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { type z } from 'zod';
+import { todoSchema } from '@server/model';
+import { cn } from '@client/lib/utils';
+
 
 export type Props = {}
-export const userInputSchema = schema.pick({
+export const userInputSchema = todoSchema.pick({
   title: true
 })
 
