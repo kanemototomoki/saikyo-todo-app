@@ -15,7 +15,10 @@
     "lint": "eslint --ext .tsx,.ts src/",
     "format": "prettier --write \"**/*.+(js|json|yml|ts|tsx)\"",
     "gen:component": "scaffdog generate component",
-    "gen:page": "scaffdog generate page"
+    "gen:page": "scaffdog generate page",
+    "dev-db:init": "run-z dev-db:create-table dev-db:create-dummy-data",
+    "dev-db:create-table": "wrangler d1 execute saikyo-todo-preview --file=./functions/sql/create-table.sql",
+    "dev-db:create-dummy-data": "wrangler d1 execute saikyo-todo-preview --file=./functions/sql/create-dummy-data.sql"
   },
   "dependencies": {
     "hono": "^3.0.3",
@@ -67,6 +70,7 @@
     "prettier": "^2.8.4",
     "prettier-plugin-tailwindcss": "^0.2.4",
     "react-hook-form": "^7.43.3",
+    "run-z": "^1.11.0",
     "scaffdog": "^2.5.0",
     "storybook": "^7.0.0-beta.58",
     "tailwind-merge": "^1.10.0",
