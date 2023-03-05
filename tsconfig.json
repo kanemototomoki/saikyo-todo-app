@@ -27,6 +27,7 @@
     "src/client",
     "src/server",
     "functions",
+    "pages",
     "vite.config.ts",
     "jest.setup.ts"
   ],
