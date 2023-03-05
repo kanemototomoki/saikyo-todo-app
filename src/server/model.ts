@@ -10,22 +10,20 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-if (import.meta.env.DEV) {
-  app.use(
-    '*',
-    cors({
-      origin: 'http://localhost:5173',
-      allowHeaders: ['Content-Type', 'Authorization'],
-      allowMethods: ['POST', 'GET', 'OPTIONS'],
-      exposeHeaders: ['Content-Length'],
-      maxAge: 600,
-      credentials: true
-    })
-  )
-  app.options('*', (c) => {
-    return c.text('', 204)
+app.use(
+  '*',
+  cors({
+    origin: '*',
+    allowHeaders: ['Content-Type', 'Authorization'],
+    allowMethods: ['POST', 'GET', 'OPTIONS'],
+    exposeHeaders: ['Content-Length'],
+    maxAge: 600,
+    credentials: true
   })
-}
+)
+app.options('*', (c) => {
+  return c.text('', 204)
+})
 
 export const todoSchema = z.object({
   title: z.coerce
