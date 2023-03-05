@@ -1,7 +1,8 @@
 import { hc } from 'hono/client'
 import type { AppType, TodoResponse } from '@server/model'
 
-const client = hc<AppType>('http://localhost:8788/api')
+const url = import.meta.env.DEV ? 'http://localhost:8788/api' : 'api'
+const client = hc<AppType>(url)
 
 // export const post = await client.todos.$post({
 //   form: {
