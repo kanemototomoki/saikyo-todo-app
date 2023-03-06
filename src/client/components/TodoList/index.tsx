@@ -4,17 +4,47 @@ export type Props = {}
 export default function TodoList() {
   const { data, isError, error, isLoading, isFetching } = useGetAllTodo()
   const todos = data?.todos || []
-  console.warn({ data, isError, error, isLoading, isFetching })
+  // console.warn({ data, isError, error, isLoading, isFetching })
+
+  const handleDelete = (id) => {
+    return id
+  }
+  const handleComplete = async (id) => {
+    // const res = await client
+  }
+  const handleEdit = (id) => {
+    return id
+  }
   return (
     <>
-      {todos.map((todo) => {
-        return (
-          <div key={todo.id}>
-            <p>{todo.title}</p>
-            <p>{todo.is_done}</p>
-          </div>
-        )
-      })}
+      <ul className="divide-y divide-gray-200">
+        {todos.map((todo, index) => (
+          <li
+            key={index}
+            className="grid grid-cols-4 items-center justify-between py-4 place-content-center"
+          >
+            <button
+              className="rounded bg-gray-500 py-2 px-4 font-bold text-white hover:bg-gray-600"
+              onClick={() => handleEdit(todo.id)}
+            >
+              Edit
+            </button>
+            <h3 className="text-lg font-medium">{todo.title}</h3>
+            <input
+              type="checkbox"
+              checked={todo.is_done}
+              className="mr-2 rounded bg-green-500 py-2 px-4 font-bold text-white hover:bg-green-600"
+              onChange={handleComplete(todo.id)}
+            ></input>
+            <button
+              className="mr-2 rounded bg-red-500 py-2 px-4 font-bold text-white hover:bg-red-600"
+              onClick={() => handleDelete(todo.id)}
+            >
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
     </>
   )
 }

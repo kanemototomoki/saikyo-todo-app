@@ -21,7 +21,7 @@ function App() {
               'w-full bg-red-500 py-2 text-center font-bold text-white'
             )}
           >
-            preview環境です
+            preview
           </header>
         )}
         <main

@@ -21,9 +21,6 @@ app.use(
     credentials: true
   })
 )
-app.options('*', (c) => {
-  return c.text('', 204)
-})
 
 export const todoSchema = z.object({
   title: z.coerce
@@ -37,7 +34,7 @@ export const todoSchema = z.object({
 })
 
 export type Schema = z.infer<typeof todoSchema>
-export const todoResponseSchema = z.object({
+const todoResponseSchema = z.object({
   id: z.number(),
   title: z.string(),
   created_at: z.string(),
@@ -45,16 +42,32 @@ export const todoResponseSchema = z.object({
 })
 export type TodoResponse = z.infer<typeof todoResponseSchema>
 
+export const postTodoSchema = todoSchema.pick({
+  title: true
+})
+export type PostTodoSchema = z.infer<typeof postTodoSchema>
+const updateTodoSchema = todoSchema
+  .pick({
+    isDone: true
+  })
+  .or(
+    todoSchema.pick({
+      title: true
+    })
+  )
+
 const route = app
-  .post('/todos', zValidator('form', todoSchema), async (c) => {
-    const task = c.req.valid('form')
-    await c.env.DB.prepare('INSERT INTO todos(title, is_done) VALUES (?, ?);')
-      .bind(task.title, task.isDone)
+  .post('/todos', zValidator('form', postTodoSchema), async (c) => {
+    const { title } = c.req.valid('form')
+
+    const res = await c.env.DB.prepare('INSERT INTO todos (title) VALUES (?);')
+      .bind(title)
       .run()
+
     return c.jsonT(
       {
         ok: true,
-        message: `${task.title} is created!`
+        id: res.meta.last_row_id as number
       },
       201
     )
@@ -70,6 +83,18 @@ const route = app
       },
       200
     )
+  })
+  .put('/todo/:id', zValidator('json', updateTodoSchema), async (c) => {
+    const todoId = c.req.param('id')
+    const json = c.req.valid('json')
+    console.warn('put', json)
+    // await c.env.DB.prepare('UPDATE todos SET is_done = ? WHERE id = ?;')
+    //   .bind(isDone ? 1 : 0, todoId)
+    //   .run()
+
+    return c.jsonT({
+      message: `${todoId} is updated`
+    })
   })
 
 export type AppType = typeof route

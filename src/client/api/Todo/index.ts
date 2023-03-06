@@ -1,15 +1,24 @@
 import { hc } from 'hono/client'
-import type { AppType, TodoResponse } from '@server/model'
+import type { AppType, TodoResponse, PostTodoSchema } from '@server/model'
 
 const url = import.meta.env.DEV ? 'http://localhost:8788/api' : 'api'
 const client = hc<AppType>(url)
 
-// export const post = await client.todos.$post({
-//   form: {
-//     title: 'aaa',
-//     isDone: String(false)
-//   }
-// })
+/**
+ * @desc Todo追加
+ */
+export async function postTodo({ title }: PostTodoSchema): Promise<{
+  ok: boolean
+  id: number
+}> {
+  const res = await client.todos.$post({
+    form: {
+      title
+    }
+  })
+
+  return await res.json()
+}
 
 /**
  * @desc Todo全件取得

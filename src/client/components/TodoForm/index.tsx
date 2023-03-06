@@ -1,28 +1,29 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { type z } from 'zod';
-import { todoSchema } from '@server/model';
-import { cn } from '@client/lib/utils';
-
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { postTodoSchema, type PostTodoSchema } from '@server/model'
+import { postTodo } from '@client/api/Todo'
+import { cn } from '@client/lib/utils'
 
 export type Props = {}
-export const userInputSchema = todoSchema.pick({
-  title: true
-})
-
-export type UserInputSchema = z.infer<typeof userInputSchema>
 
 export default function TodoForm() {
   const {
     register,
     formState: { errors },
-    handleSubmit
-  } = useForm<UserInputSchema>({
-    resolver: zodResolver(userInputSchema)
+    handleSubmit,
+    reset
+  } = useForm<PostTodoSchema>({
+    resolver: zodResolver(postTodoSchema)
   })
 
-  const onSubmit = (data: UserInputSchema) => {
-    console.warn(data)
+  const onSubmit = async (data: PostTodoSchema) => {
+    const res = await postTodo({
+      title: data.title
+    })
+    if (!res.ok) {
+      // TODO
+    }
+    reset()
   }
 
   return (
@@ -42,18 +43,15 @@ export default function TodoForm() {
           'col-span-4 w-full rounded-md border border-gray-300 py-2 px-3'
         )}
       />
-
       <button
         type="submit"
-        className="w-max rounded bg-blue-500 py-2 px-4 font-bold text-white  hover:bg-blue-700"
+        className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
       >
         追加
       </button>
-      {errors.title?.message && (
-        <p className="col-span-2 text-sm text-red-500">
-          {errors.title?.message}
-        </p>
-      )}
+      <p className={cn('col-span-2 h-[2cqh] text-sm text-red-500')}>
+        {errors.title?.message || ' '}
+      </p>
     </form>
   )
 }
