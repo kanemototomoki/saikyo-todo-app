@@ -1,4 +1,6 @@
-import { useGetAllTodo } from '@client/api/Todo/useGetAllTodo'
+import { type DeleteTodoSchema } from '@/src/server/model'
+import { useDeleteTodo } from './useDeleteTodo'
+import { useGetAllTodo } from './useGetAllTodo'
 
 export type Props = {}
 export default function TodoList() {
@@ -6,8 +8,11 @@ export default function TodoList() {
   const todos = data?.todos || []
   // console.warn({ data, isError, error, isLoading, isFetching })
 
-  const handleDelete = (id) => {
-    return id
+  const deleteMutation = useDeleteTodo()
+  const handleDelete = (id: DeleteTodoSchema['id']) => {
+    deleteMutation.mutate({
+      id
+    })
   }
   const handleComplete = async (id) => {
     // const res = await client
@@ -21,7 +26,7 @@ export default function TodoList() {
         {todos.map((todo, index) => (
           <li
             key={index}
-            className="grid grid-cols-4 items-center justify-between py-4 place-content-center"
+            className="grid grid-cols-4 place-content-center items-center justify-between py-4"
           >
             <button
               className="rounded bg-gray-500 py-2 px-4 font-bold text-white hover:bg-gray-600"
@@ -38,7 +43,9 @@ export default function TodoList() {
             ></input>
             <button
               className="mr-2 rounded bg-red-500 py-2 px-4 font-bold text-white hover:bg-red-600"
-              onClick={() => handleDelete(todo.id)}
+              onClick={() => {
+                handleDelete(todo.id)
+              }}
             >
               Delete
             </button>

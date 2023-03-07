@@ -15,7 +15,7 @@ app.use(
   cors({
     origin: '*',
     allowHeaders: ['Content-Type', 'Authorization'],
-    allowMethods: ['POST', 'GET', 'OPTIONS'],
+    allowMethods: ['POST', 'GET', 'PUT', 'DELETE', 'OPTIONS'],
     exposeHeaders: ['Content-Length'],
     maxAge: 600,
     credentials: true
@@ -56,6 +56,12 @@ const updateTodoSchema = todoSchema
     })
   )
 
+const deleteTodoSchema = z.object({
+  id: z.number()
+})
+
+export type DeleteTodoSchema = z.infer<typeof deleteTodoSchema>
+
 const route = app
   .post('/todos', zValidator('form', postTodoSchema), async (c) => {
     const { title } = c.req.valid('form')
@@ -74,7 +80,7 @@ const route = app
   })
   .get('/todos', async (c) => {
     const { results } = await c.env.DB.prepare(
-      'SELECT * FROM todos;'
+      'SELECT * FROM todos ORDER BY id asc;'
     ).all<TodoResponse>()
     return c.jsonT(
       {
@@ -84,7 +90,7 @@ const route = app
       200
     )
   })
-  .put('/todo/:id', zValidator('json', updateTodoSchema), async (c) => {
+  .put('/todos/:id', zValidator('json', updateTodoSchema), async (c) => {
     const todoId = c.req.param('id')
     const json = c.req.valid('json')
     console.warn('put', json)
@@ -93,7 +99,19 @@ const route = app
     //   .run()
 
     return c.jsonT({
+      ok: true,
       message: `${todoId} is updated`
+    })
+  })
+  .delete('/todos/:id', async (c) => {
+    const todoId = c.req.param('id')
+    const res = await c.env.DB.prepare('DELETE FROM todos WHERE id = ?;')
+      .bind(todoId)
+      .run()
+    
+    return c.jsonT({
+      ok: true,
+      id: res.meta.last_row_id as number
     })
   })
 

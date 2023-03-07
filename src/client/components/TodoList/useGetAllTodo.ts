@@ -1,5 +1,5 @@
+import { getAllTodo } from '@/src/client/api/todos'
 import { useQuery } from '@tanstack/react-query'
-import { getAllTodo } from '.'
 
 export const useGetAllTodo = () => {
   return useQuery({

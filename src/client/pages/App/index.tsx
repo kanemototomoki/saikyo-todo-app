@@ -8,7 +8,7 @@ const queryClient = new QueryClient()
 function App() {
   const isDev = import.meta.env.DEV
   const wrapperClass = cn(
-    'grid h-screen grid-rows-[1fr]',
+    'grid h-screen grid-rows-[1fr] transition-all duration-300',
     isDev && 'grid-rows-[auto_1fr]'
   )
 
