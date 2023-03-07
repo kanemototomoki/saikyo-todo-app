@@ -106,7 +106,6 @@ const route = app
         .bind(json.title, todoId)
         .run()
     } else {
-      console.log(json)
       res = await c.env.DB.prepare('UPDATE todos SET is_done = ? WHERE id = ?;')
         .bind(Number(json.isDone) ? 1 : 0, todoId)
         .run()
