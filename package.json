@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "wrangler pages dev --local --compatibility-date=2023-03-01 -- npm run dev:client",
+    "dev": "wrangler pages dev --compatibility-date=2023-03-01 --env dev --local --persist --d1=DB -- npm run dev:client",
     "dev:client": "vite",
     "build": "tsc && vite build",
     "deploy": "npm run build && wrangler pages publish pages",
@@ -15,7 +15,10 @@
     "lint": "eslint --ext .tsx,.ts src/",
     "format": "prettier --write \"**/*.+(js|json|yml|ts|tsx)\"",
     "gen:component": "scaffdog generate component",
-    "gen:page": "scaffdog generate page"
+    "gen:page": "scaffdog generate page",
+    "dev-db:init": "run-z dev-db:create-table dev-db:create-dummy-data",
+    "dev-db:create-table": "wrangler d1 execute saikyo-todo-preview --file=./src/server/sql/create-table.sql",
+    "dev-db:create-dummy-data": "wrangler d1 execute saikyo-todo-preview --file=./src/server/sql/create-dummy-data.sql"
   },
   "dependencies": {
     "hono": "^3.0.3",
@@ -24,6 +27,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
+    "@cloudflare/workers-types": "^4.20230228.0",
     "@hono/zod-validator": "^0.0.6",
     "@hookform/resolvers": "^2.9.11",
     "@storybook/addon-actions": "^7.0.0-beta.58",
@@ -35,6 +39,7 @@
     "@storybook/react-vite": "^7.0.0-beta.58",
     "@storybook/testing-library": "^0.0.14-next.1",
     "@tailwindcss/container-queries": "^0.1.0",
+    "@tanstack/react-query": "^4.26.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
@@ -45,6 +50,7 @@
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@vitejs/plugin-react-swc": "^3.0.0",
     "autoprefixer": "^10.4.13",
+    "axios": "^1.3.4",
     "babel-loader": "^8.3.0",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
@@ -67,6 +73,7 @@
     "prettier": "^2.8.4",
     "prettier-plugin-tailwindcss": "^0.2.4",
     "react-hook-form": "^7.43.3",
+    "run-z": "^1.11.0",
     "scaffdog": "^2.5.0",
     "storybook": "^7.0.0-beta.58",
     "tailwind-merge": "^1.10.0",
