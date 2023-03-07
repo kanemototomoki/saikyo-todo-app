@@ -1,8 +1,8 @@
 ---
 name: 'component'
 description: 'Generate React Component'
-root: './src/client/'
-output: 'components/*'
+root: './src/client/components'
+output: '.'
 ignore: []
 questions:
   name: 'Please enter component name'

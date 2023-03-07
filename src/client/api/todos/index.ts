@@ -1,9 +1,11 @@
 import { hc } from 'hono/client'
 import type {
   AppType,
-  TodoResponse,
+  TodoResponseSchema,
   PostTodoSchema,
-  DeleteTodoSchema
+  DeleteTodoSchema,
+  UpdateTodoSchema,
+  ParamTodoId
 } from '@server/model'
 
 const url = import.meta.env.DEV ? 'http://localhost:8788/api' : 'api'
@@ -30,14 +32,33 @@ export async function addTodo({ title }: PostTodoSchema): Promise<{
  */
 export async function getAllTodo(): Promise<{
   ok: boolean
-  todos: TodoResponse[]
+  todos: TodoResponseSchema[]
 }> {
   const res = await client.todos.$get()
   // https://github.com/honojs/hono/issues/950
   return (await res.json()) as unknown as {
     ok: boolean
-    todos: TodoResponse[]
+    todos: TodoResponseSchema[]
   }
+}
+
+/**
+ * @desc Todo更新
+ */
+export async function updateTodo({
+  id,
+  ...other
+}: ParamTodoId & UpdateTodoSchema) {
+  const res = await client.todos[':id'].$put({
+    param: {
+      id: id.toString()
+    },
+    json: {
+      ...other
+    }
+  })
+
+  return await res.json()
 }
 
 /**

@@ -1,8 +1,8 @@
 ---
 name: 'page'
 description: 'Generate React page'
-root: './src/client/'
-output: 'page/*'
+root: './src/client/page/'
+output: '.'
 ignore: []
 questions:
   name: 'Please enter component name'

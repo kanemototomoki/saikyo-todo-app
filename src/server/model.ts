@@ -22,45 +22,52 @@ app.use(
   })
 )
 
-export const todoSchema = z.object({
+export const baseTodoSchema = z.object({
+  id: z.string(),
   title: z.coerce
     .string()
     .trim()
     .min(1, {
       message: 'Task is required'
     })
-    .max(50),
+    .max(10),
   isDone: z.string()
 })
+export type BaseTodoSchema = z.infer<typeof baseTodoSchema>
 
-export type Schema = z.infer<typeof todoSchema>
 const todoResponseSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   title: z.string(),
   created_at: z.string(),
-  is_done: z.boolean()
+  is_done: z.string()
 })
-export type TodoResponse = z.infer<typeof todoResponseSchema>
+export type TodoResponseSchema = z.infer<typeof todoResponseSchema>
 
-export const postTodoSchema = todoSchema.pick({
+export type ParamTodoId = Pick<TodoResponseSchema, 'id'>
+
+export const postTodoSchema = baseTodoSchema.pick({
   title: true
 })
 export type PostTodoSchema = z.infer<typeof postTodoSchema>
-const updateTodoSchema = todoSchema
-  .pick({
-    isDone: true
-  })
-  .or(
-    todoSchema.pick({
-      title: true
-    })
-  )
 
-const deleteTodoSchema = z.object({
-  id: z.number()
+const updateTodoIsDoneSchema = baseTodoSchema.pick({
+  isDone: true
 })
 
-export type DeleteTodoSchema = z.infer<typeof deleteTodoSchema>
+const updateTodoContentSchema = baseTodoSchema.pick({
+  title: true
+})
+
+const updateTodoSchema = z.union([
+  updateTodoIsDoneSchema,
+  updateTodoContentSchema
+])
+
+export type UpdateTodoIsDoneSchema = z.infer<typeof updateTodoIsDoneSchema>
+export type UpdateTodoContentSchema = z.infer<typeof updateTodoContentSchema>
+export type UpdateTodoSchema = z.infer<typeof updateTodoSchema>
+
+export type DeleteTodoSchema = ParamTodoId
 
 const route = app
   .post('/todos', zValidator('form', postTodoSchema), async (c) => {
@@ -81,7 +88,7 @@ const route = app
   .get('/todos', async (c) => {
     const { results } = await c.env.DB.prepare(
       'SELECT * FROM todos ORDER BY id asc;'
-    ).all<TodoResponse>()
+    ).all<TodoResponseSchema>()
     return c.jsonT(
       {
         ok: true,
@@ -93,14 +100,21 @@ const route = app
   .put('/todos/:id', zValidator('json', updateTodoSchema), async (c) => {
     const todoId = c.req.param('id')
     const json = c.req.valid('json')
-    console.warn('put', json)
-    // await c.env.DB.prepare('UPDATE todos SET is_done = ? WHERE id = ?;')
-    //   .bind(isDone ? 1 : 0, todoId)
-    //   .run()
+    let res = null
+    if ('title' in json) {
+      res = await c.env.DB.prepare('UPDATE todos SET title = ? WHERE id = ?;')
+        .bind(json.title, todoId)
+        .run()
+    } else {
+      console.log(json)
+      res = await c.env.DB.prepare('UPDATE todos SET is_done = ? WHERE id = ?;')
+        .bind(Number(json.isDone) ? 1 : 0, todoId)
+        .run()
+    }
 
     return c.jsonT({
       ok: true,
-      message: `${todoId} is updated`
+      id: res.meta.last_row_id as number
     })
   })
   .delete('/todos/:id', async (c) => {
@@ -108,7 +122,7 @@ const route = app
     const res = await c.env.DB.prepare('DELETE FROM todos WHERE id = ?;')
       .bind(todoId)
       .run()
-    
+
     return c.jsonT({
       ok: true,
       id: res.meta.last_row_id as number
