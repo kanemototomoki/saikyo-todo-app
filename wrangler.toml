@@ -1,12 +1,4 @@
-[env.production]
-[[env.production.d1_databases]]
+[[d1_databases]]
 binding = "DB"
 database_name = "saikyo-todo"
 database_id = "5d17fd03-7988-4835-84a5-11b72ec04471"
-
-[env.dev]
-[env.dev.vars]
-[[env.dev.d1_databases]]
-binding = "DB"
-database_name = "saikyo-todo-preview"
-database_id = "5dd9aa34-1533-4638-a12b-2714e973ff80"

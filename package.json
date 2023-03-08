@@ -16,9 +16,9 @@
     "format": "prettier --write \"**/*.+(js|json|yml|ts|tsx)\"",
     "gen:component": "scaffdog generate component",
     "gen:page": "scaffdog generate page",
-    "dev-db:init": "run-z dev-db:create-table dev-db:create-dummy-data",
-    "dev-db:create-table": "wrangler d1 execute saikyo-todo-preview --file=./src/server/sql/create-table.sql",
-    "dev-db:create-dummy-data": "wrangler d1 execute saikyo-todo-preview --file=./src/server/sql/create-dummy-data.sql"
+    "db:init": "run-z db:create-table db:create-dummy-data",
+    "db:create-table": "wrangler d1 execute saikyo-todo --file=./src/server/sql/create-table.sql",
+    "db:create-dummy-data": "wrangler d1 execute saikyo-todo --file=./src/server/sql/create-dummy-data.sql"
   },
   "dependencies": {
     "hono": "^3.0.3",
