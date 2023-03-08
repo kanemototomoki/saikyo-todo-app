@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TodoForm from '@client/components/TodoForm'
 import TodoList from '@client/components/TodoList'
 import { cn } from '@client/lib/utils'
@@ -16,23 +17,26 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className={wrapperClass}>
         {isDev && (
-          <header
-            className={cn(
-              'w-full bg-red-500 py-2 text-center font-bold text-white'
-            )}
-          >
-            preview
-          </header>
+          <>
+            <header
+              className={cn(
+                'w-full bg-red-500 py-2 text-center font-bold text-white'
+              )}
+            >
+              preview
+            </header>
+          </>
         )}
         <main
           role="main"
           className={cn(
-            'container-type-inline mx-auto grid w-full place-content-center @container/App'
+            'container-type-inline place-content-center mx-auto grid w-full gap-6 @container/App'
           )}
         >
           <TodoForm />
           <TodoList />
         </main>
+        {isDev && <ReactQueryDevtools initialIsOpen={false} />}
       </div>
     </QueryClientProvider>
   )

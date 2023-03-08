@@ -8,10 +8,15 @@ export const useAddTodo = () => {
   const addMutation = useMutation(
     async ({ title }: PostTodoSchema) => await addTodo({ title }),
     {
-      onSuccess: async (data: SuccessResponse) => {
+      onMutate: async () => {
+        await queryClient.cancelQueries({ queryKey: ['allTodo'] })
+      },
+      onSuccess: (data: SuccessResponse) => {
         // TODO: allTodoを定数から取得する
-        await queryClient.invalidateQueries(['allTodo'])
         return data
+      },
+      onSettled: async () => {
+        await queryClient.invalidateQueries(['allTodo'])
       }
     }
   )
