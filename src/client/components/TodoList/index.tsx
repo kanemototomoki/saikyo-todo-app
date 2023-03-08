@@ -12,7 +12,7 @@ export default function TodoList() {
         {todos.map((todo) => (
           <li
             key={todo.id}
-            className="grid grid-cols-4 place-content-center items-center justify-between py-4"
+            className="grid grid-cols-[3fr_1fr_1fr] place-content-center items-center justify-between py-4"
           >
             <TodoItem todo={todo} />
           </li>

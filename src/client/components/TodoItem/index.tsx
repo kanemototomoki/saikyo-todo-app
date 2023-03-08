@@ -1,10 +1,10 @@
 import type {
   TodoResponseSchema,
   DeleteTodoSchema,
-  UpdateTodoIsDoneSchema,
-  UpdateTodoContentSchema,
+  UpdateTodoIsDoneSchema, // UpdateTodoContentSchema,
   ParamTodoId
 } from '@server/model'
+import { cn } from '@client/lib/utils'
 import { useDeleteTodo } from './useDeleteTodo'
 import { useUpdateTodo } from './useUpdateTodo'
 
@@ -28,23 +28,29 @@ export default function TodoItem({ todo }: Props) {
       isDone
     })
   }
-  const handleEdit = ({ id, title }: ParamTodoId & UpdateTodoContentSchema) => {
-    updateMutation.mutate({
-      id,
-      title
-    })
-  }
+  // const handleEdit = ({ id, title }: ParamTodoId & UpdateTodoContentSchema) => {
+  //   updateMutation.mutate({
+  //     id,
+  //     title
+  //   })
+  // }
   return (
     <>
-      <button
+      {/* <button
         className="rounded bg-gray-500 py-2 px-4 font-bold text-white hover:bg-gray-600"
         onClick={() => {
           handleEdit({ id: todo.id, title: 'sample' })
         }}
       >
         Edit
-      </button>
-      <h3 className="text-lg font-medium">{todo.title}</h3>
+      </button> */}
+      <h3
+        className={cn(
+          'first-letter:float-left first-letter:mr-3 first-letter:text-7xl first-letter:font-bold first-letter:text-slate-900 first-line:uppercase first-line:tracking-widest'
+        )}
+      >
+        {todo.title}
+      </h3>
       <input
         type="checkbox"
         checked={Boolean(todo.is_done)}
