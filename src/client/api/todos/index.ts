@@ -30,11 +30,22 @@ export async function addTodo({ title }: PostTodoSchema): Promise<{
 /**
  * @desc Todo全件取得
  */
-export async function getAllTodo({
-  cursor,
-}: {
-  cursor: number
-}): Promise<{
+export async function getAllTodo(): Promise<{
+  ok: boolean
+  todos: TodoResponseSchema[]
+}> {
+  const res = await client.todos.$get()
+  // https://github.com/honojs/hono/issues/950
+  return (await res.json()) as unknown as {
+    ok: boolean
+    todos: TodoResponseSchema[]
+  }
+}
+
+/**
+ * @desc Todo取得
+ */
+export async function getCursorTodo({ cursor }: { cursor: number }): Promise<{
   ok: boolean
   todos: TodoResponseSchema[]
   next: string | null
@@ -42,8 +53,8 @@ export async function getAllTodo({
 }> {
   const res = await client.todos.$get({
     query: {
-      cursor,
-    },
+      cursor
+    }
   })
   // https://github.com/honojs/hono/issues/950
   return (await res.json()) as unknown as {

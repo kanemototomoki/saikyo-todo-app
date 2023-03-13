@@ -1,12 +1,4 @@
-import {
-  startTransition,
-  Suspense,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { TodoResponseSchema } from '@server/model'
 import TodoItem from '@client/components/TodoItem'
 import { cn } from '../../lib/utils'
@@ -15,52 +7,10 @@ import { useGetAllTodo } from './useGetAllTodo'
 export type Props = {}
 export default function TodoList() {
   const [isInitFinish, setIsInitFinish] = useState(false)
-  // const [displayTodo, setDisplayTodo] = useState<TodoResponseSchema[]>([])
-  const {
-    data,
-    // error,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-    status,
-    removeData
-  } = useGetAllTodo()
-  // useEffect(() => {
-  //   setDisplayTodo(() => data?.pages.flatMap((page) => page.todos) || [])
-  // }, [data])
-  const displayTodo: TodoResponseSchema[] = useMemo(() => {
-    return data?.pages.flatMap((page) => page.todos) || []
-  }, [data?.pages])
-  // const displayTodo: TodoResponseSchema[] =
-  //   data?.pages.flatMap((page) => page.todos) || []
-
-  const todoIdList = displayTodo.map((todo) => todo.id)
-  const topIndex = todoIdList.at(1) as string
-  const bottomIndex = todoIdList.at(-2) as string
-
-  // 上と下の要素を監視する
-  const topTarget = document.querySelector(`li[data-index="${topIndex}"]`)
-  const bottomTarget = document.querySelector(`li[data-index="${bottomIndex}"]`)
-
-  const fetchNextOrPrev = ({ type }: { type: 'next' | 'prev' }) => {
-    console.log('fetchNextOrPrev', type, displayTodo.length)
-    if (displayTodo.length === 30) return
-
-    const fn = type === 'next' ? fetchNextPage : fetchPreviousPage
-    fn()
-    // Todoが30以上あれば削除する
-    // void fn().then((res) => {
-    //   const len = res.data?.pages?.length || 1
-    //   console.log(len, displayTodo, isFetching)
-    //   if (len > 3 && !isFetching) {
-    //     const page = type === 'next' ? 1 : len - 1
-    //     const re = removeData(page)
-    //     console.log('削除！！', re)
-    //   }
-    // })
-  }
+  const { data } = useGetAllTodo()
+  const allTodo = useMemo(() => data?.todos || [], [data?.todos])
+  const [displayTodo, setDisplayTodo] =
+    useState<Array<TodoResponseSchema & { orderId?: number }>>(allTodo)
 
   const observerRef = useRef(
     new IntersectionObserver(
@@ -73,12 +23,6 @@ export default function TodoList() {
               displayTodoLength: displayTodo.length
             })
             entry.target.style.backgroundColor = 'pink'
-
-            if (entry.target.dataset.index === topIndex) {
-              fetchNextOrPrev({ type: 'prev' })
-            } else {
-              fetchNextOrPrev({ type: 'next' })
-            }
           }
         }
       },
@@ -94,6 +38,16 @@ export default function TodoList() {
     const observer = observerRef.current
 
     function observe() {
+      const todoIdList = displayTodo.map((todo) => todo.id)
+      const topIndex = todoIdList.at(1) as string
+      const bottomIndex = todoIdList.at(-2) as string
+
+      // 上と下の要素を監視する
+      const topTarget = document.querySelector(`li[data-index="${topIndex}"]`)
+      const bottomTarget = document.querySelector(
+        `li[data-index="${bottomIndex}"]`
+      )
+      console.log(topTarget, bottomTarget)
       if (!topTarget || !bottomTarget) return
 
       observer.observe(topTarget)
@@ -107,52 +61,38 @@ export default function TodoList() {
       observe,
       disconnect
     }
-  }, [bottomTarget, topTarget])
+  }, [])
 
   /**
-   * ページ読み込み時の初期設定
+   * 初期描画の処理
    */
   useEffect(() => {
-    // 1ページ目しか存在しないときに実行
-    if (!data || data.pages[1]) return
-    const fn = async () => {
-      const { prev, next, todos } = data.pages[0]
-      const firstTodoId = todos[0].id
-      await fetchPreviousPage({ pageParam: prev })
-      await fetchNextPage({ pageParam: next })
+    const addOrderIdTodo = [...allTodo].map((todo, i) => ({
+      ...todo,
+      orderId: i + 1
+    }))
+    const firstTodoId = addOrderIdTodo[0]?.orderId
+    const cutTodo = addOrderIdTodo.splice(40, 10)
+    setDisplayTodo(() => {
+      return [...cutTodo, ...addOrderIdTodo]
+    })
 
+    // 一番若いIDの要素を画面中央にスクロールさせる
+    setTimeout(() => {
       const ele = document.querySelector(`li[data-index="${firstTodoId}"]`)
       if (ele) {
         ele.style.backgroundColor = 'blue'
         ele.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }
-      await Promise.resolve()
-    }
-
-    const observer = setObserver()
-
-    fn()
-      .then(() => {
-        setIsInitFinish(true)
-
-        observer.observe()
-        observer.observe()
-      })
-      .catch((e) => {
-        console.error(e)
-      })
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [data])
+      setIsInitFinish(true)
+    }, 0)
+  }, [allTodo])
 
   useEffect(() => {
     if (!isInitFinish) return
 
     const observer = setObserver()
 
-    observer.observe()
     observer.observe()
 
     return () => {
@@ -162,47 +102,22 @@ export default function TodoList() {
 
   return (
     <>
-      <ul
+      <ol
         id="todoList"
-        className="-pt-[calc(100vh/24)] divide-y divide-gray-200"
+        className="fjalla-one list-outside list-decimal divide-y divide-gray-200"
       >
         {displayTodo.map((todo) => (
           <li
             key={todo.id}
-            data-index={todo.id}
+            data-index={todo.orderId}
             className={cn(
-              'grid h-[calc(100vh/10)] grid-cols-[3fr_1fr_1fr] place-content-center items-center justify-between py-4'
+              'grid h-[calc(100vh/10)] grid-cols-[1fr_3fr_1fr_1fr] place-content-center justify-between py-4'
             )}
           >
-            <TodoItem todo={todo} />
+            <TodoItem todo={todo} orderId={todo.orderId} />
           </li>
         ))}
-      </ul>
-      <div
-        style={{
-          position: 'absolute',
-          top: '20%',
-          left: '20%',
-          display: 'grid'
-        }}
-      >
-        <button
-          style={{
-            border: '1px solid'
-          }}
-          onClick={() => removeData(1)}
-        >
-          最初を削除
-        </button>
-        <button
-          style={{
-            border: '1px solid'
-          }}
-          onClick={() => removeData(data?.pages.length - 1)}
-        >
-          最後を削除
-        </button>
-      </div>
+      </ol>
     </>
   )
 }

@@ -10,8 +10,9 @@ import { useUpdateTodo } from './useUpdateTodo'
 
 export type Props = {
   todo: TodoResponseSchema
+  orderId: number | undefined
 }
-export default function TodoItem({ todo }: Props) {
+export default function TodoItem({ todo, orderId }: Props) {
   const deleteMutation = useDeleteTodo()
   const updateMutation = useUpdateTodo()
   const handleDelete = ({ id }: DeleteTodoSchema) => {
@@ -44,9 +45,10 @@ export default function TodoItem({ todo }: Props) {
       >
         Edit
       </button> */}
+      <p className={cn('text-3xl font-bold')}># {orderId}</p>
       <h3
         className={cn(
-          'first-letter:float-left first-letter:mr-3 first-letter:text-7xl first-letter:font-bold first-letter:text-slate-900 first-line:uppercase first-line:tracking-widest'
+          'first-letter:float-left first-letter:mr-3 first-letter:text-5xl first-letter:font-bold first-letter:text-slate-900 first-line:uppercase first-line:tracking-widest'
         )}
       >
         {todo.title}

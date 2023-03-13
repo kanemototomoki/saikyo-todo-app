@@ -19,19 +19,19 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div
         className={cn(
-          'grid h-screen grid-rows-[1fr] px-4 transition-all duration-300'
+          'grid h-screen grid-rows-[1fr] px-4'
         )}
       >
         <main
           role="main"
           className={cn(
-            'container-type-inline mx-auto grid w-full grid-cols-[auto_auto] place-content-center items-center justify-items-center gap-6 @container/App'
+            'container-type-inline mx-auto grid w-full grid-cols-[auto_auto] place-content-center gap-6 @container/App'
           )}
         >
-          <div className={cn('')}>
+          <div className={cn('self-center')}>
             <TodoForm />
           </div>
-          <div className={cn(' max-h-[100svh] overflow-auto')}>
+          <div className={cn('max-h-[100svh] overflow-auto')}>
             <TodoList />
           </div>
         </main>
