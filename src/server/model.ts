@@ -69,6 +69,8 @@ export type UpdateTodoSchema = z.infer<typeof updateTodoSchema>
 
 export type DeleteTodoSchema = ParamTodoId
 
+const CURSOR_SIZE = 10
+
 const route = app
   .post('/todos', zValidator('form', postTodoSchema), async (c) => {
     const { title } = c.req.valid('form')
@@ -86,13 +88,34 @@ const route = app
     )
   })
   .get('/todos', async (c) => {
-    const { results } = await c.env.DB.prepare(
-      'SELECT * FROM todos ORDER BY id asc;'
-    ).all<TodoResponseSchema>()
+    const cursor = Number(c.req.query('cursor')) || 1
+    const limit = c.req.query('limit') || CURSOR_SIZE
+    const isDesc = c.req.query('desc')
+    const startIndex = (cursor - 1) * CURSOR_SIZE
+    const endIndex = startIndex + CURSOR_SIZE
+    const total = await c.env.DB.prepare(
+      `SELECT COUNT(*) AS total FROM todos;`
+    ).first<number>('total')
+    const sql = isDesc
+      ? `SELECT * FROM todos ORDER BY id desc LIMIT ${limit} OFFSET ${startIndex};`
+      : `SELECT * FROM todos ORDER BY id asc LIMIT ${limit} OFFSET ${startIndex};`
+    const { results } = await c.env.DB.prepare(sql).all<TodoResponseSchema>()
+    const todos = results || []
+    const firstCursor = 1
+    const lastCursor = Math.floor(total / CURSOR_SIZE)
+    const next = endIndex < total ? cursor + 1 : firstCursor
+    const prev = cursor > 1 ? cursor - 1 : lastCursor
+    console.log({
+      total,
+      next,
+      prev
+    })
     return c.jsonT(
       {
         ok: true,
-        todos: results || []
+        todos,
+        next,
+        prev
       },
       200
     )

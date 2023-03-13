@@ -44,9 +44,9 @@ export default function TodoForm() {
     <form
       role="form"
       onSubmit={handleSubmit(onSubmit)}
-      // 親コンテナが640px以上なら600px, それ以外は親コンテナの90%
+      // 親コンテナが640px以上なら600px, それ以外は親コンテナの80%
       className={cn(
-        'grid w-[90cqw] grid-cols-5 gap-4 gap-y-2  @[640px]/App:w-[600px]'
+        'grid w-[40cqw] gap-y-4 @[640px]/App:max-w-[350px] place-items-center'
       )}
     >
       {/* <input
@@ -57,7 +57,7 @@ export default function TodoForm() {
           'col-span-4 w-full rounded-md border border-gray-300 py-2 px-3'
         )}
       /> */}
-      <div className={cn('relative col-span-4 w-full')}>
+      <div className={cn('relative col-span-5 w-full')}>
         <input
           type="text"
           id="on-error-email"
@@ -89,7 +89,7 @@ export default function TodoForm() {
       </div>
       <button
         type="submit"
-        className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700 disabled:opacity-50"
+        className="col-start-3 w-max rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700 disabled:opacity-50"
         disabled={isLoading}
       >
         追加

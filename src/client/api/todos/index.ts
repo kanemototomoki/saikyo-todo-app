@@ -30,15 +30,27 @@ export async function addTodo({ title }: PostTodoSchema): Promise<{
 /**
  * @desc Todo全件取得
  */
-export async function getAllTodo(): Promise<{
+export async function getAllTodo({
+  cursor,
+}: {
+  cursor: number
+}): Promise<{
   ok: boolean
   todos: TodoResponseSchema[]
+  next: string | null
+  prev: string | null
 }> {
-  const res = await client.todos.$get()
+  const res = await client.todos.$get({
+    query: {
+      cursor,
+    },
+  })
   // https://github.com/honojs/hono/issues/950
   return (await res.json()) as unknown as {
     ok: boolean
     todos: TodoResponseSchema[]
+    next: string | null
+    prev: string | null
   }
 }
 
