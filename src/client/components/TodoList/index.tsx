@@ -6,52 +6,75 @@ import { useGetAllTodo } from './useGetAllTodo'
 
 export type Props = {}
 export default function TodoList() {
-  const [isInitFinish, setIsInitFinish] = useState(false)
   const { data } = useGetAllTodo()
   const allTodo = useMemo(() => data?.todos || [], [data?.todos])
   const [displayTodo, setDisplayTodo] =
     useState<Array<TodoResponseSchema & { orderId?: number }>>(allTodo)
+  const observeTargetBottom = useRef<{
+    index: number | string
+    isShow: boolean
+  }>({
+    index: 0,
+    isShow: false
+  })
 
-  const observerRef = useRef(
-    new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            console.log('observe', {
-              'data-index': entry.target.dataset.index,
-              // isIntersecting: entry.isIntersecting,
-              displayTodoLength: displayTodo.length
-            })
-            entry.target.style.backgroundColor = 'pink'
+  const createObserver = useMemo(
+    () =>
+      new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting && displayTodo.length !== 0) {
+              entry.target.style.backgroundColor = 'pink'
+
+              if (
+                (entry.target as HTMLElement).dataset.index ===
+                observeTargetBottom.current.index
+              ) {
+                // topの要素を削ってbottomに追加する
+                const count = Math.min(10, Math.floor(displayTodo.length / 5))
+                const start = 0
+                const copyTodo = [...displayTodo]
+                const cutTodo = copyTodo.splice(start, count)
+                setDisplayTodo(() => {
+                  return [...copyTodo, ...cutTodo]
+                })
+
+                console.log(observeTargetBottom.current)
+
+                // debugger
+              }
+            }
           }
+        },
+        {
+          root: document.querySelector('ul[id="todoList"]'),
+          rootMargin: '50%',
+          threshold: 0.0
         }
-      },
-      {
-        root: null,
-        rootMargin: '20% 0px',
-        threshold: 0
-      }
-    )
+      ),
+    [displayTodo]
   )
 
   const setObserver = useCallback(() => {
-    const observer = observerRef.current
+    const observer = createObserver
 
     function observe() {
-      const todoIdList = displayTodo.map((todo) => todo.id)
-      const topIndex = todoIdList.at(1) as string
-      const bottomIndex = todoIdList.at(-2) as string
-
-      // 上と下の要素を監視する
-      const topTarget = document.querySelector(`li[data-index="${topIndex}"]`)
-      const bottomTarget = document.querySelector(
-        `li[data-index="${bottomIndex}"]`
+      if (displayTodo.length <= 15) {
+        return
+      }
+      // 下から二番目くらいの要素を監視する
+      const point = displayTodo.length >= 15 ? -2 : -1
+      const ele = document.querySelector(
+        `li[data-index="${displayTodo.at(point)?.orderId || ''}"`
       )
-      console.log(topTarget, bottomTarget)
-      if (!topTarget || !bottomTarget) return
+      if (ele) {
+        observer.observe(ele)
 
-      observer.observe(topTarget)
-      observer.observe(bottomTarget)
+        observeTargetBottom.current = {
+          index: (ele as HTMLLIElement).dataset.index!,
+          isShow: false
+        }
+      }
     }
     function disconnect() {
       observer.disconnect()
@@ -61,7 +84,7 @@ export default function TodoList() {
       observe,
       disconnect
     }
-  }, [])
+  }, [createObserver, displayTodo])
 
   /**
    * 初期描画の処理
@@ -71,8 +94,17 @@ export default function TodoList() {
       ...todo,
       orderId: i + 1
     }))
+    
+    if (addOrderIdTodo.length <= 15) {
+      setDisplayTodo(() => addOrderIdTodo)
+      return
+    }
+
     const firstTodoId = addOrderIdTodo[0]?.orderId
-    const cutTodo = addOrderIdTodo.splice(40, 10)
+    const len = addOrderIdTodo.length
+    const count = Math.min(10, Math.floor(len / 5))
+    const start = len - count
+    const cutTodo = addOrderIdTodo.splice(start, count)
     setDisplayTodo(() => {
       return [...cutTodo, ...addOrderIdTodo]
     })
@@ -84,21 +116,17 @@ export default function TodoList() {
         ele.style.backgroundColor = 'blue'
         ele.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }
-      setIsInitFinish(true)
     }, 0)
   }, [allTodo])
 
   useEffect(() => {
-    if (!isInitFinish) return
-
     const observer = setObserver()
-
     observer.observe()
 
     return () => {
       observer.disconnect()
     }
-  }, [isInitFinish, setObserver])
+  }, [setObserver])
 
   return (
     <>
