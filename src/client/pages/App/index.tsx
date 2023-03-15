@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import Logo from '@client/components/Logo'
 import TodoForm from '@client/components/TodoForm'
 import TodoList from '@client/components/TodoList'
 import { cn } from '@client/lib/utils'
@@ -17,11 +18,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div
-        className={cn(
-          'grid h-screen grid-rows-[1fr] px-4'
-        )}
-      >
+      <div className={cn('grid h-screen grid-rows-[1fr] px-4')}>
         <main
           role="main"
           className={cn(
@@ -33,6 +30,9 @@ function App() {
           </div>
           <div className={cn('max-h-[100svh] overflow-auto')}>
             <TodoList />
+          </div>
+          <div className={cn('absolute bottom-0 left-0 scale-50')}>
+            <Logo />
           </div>
         </main>
         {isDev && <ReactQueryDevtools initialIsOpen={false} />}

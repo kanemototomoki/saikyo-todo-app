@@ -30,6 +30,7 @@
     "@cloudflare/workers-types": "^4.20230228.0",
     "@hono/zod-validator": "^0.0.6",
     "@hookform/resolvers": "^2.9.11",
+    "@savvywombat/tailwindcss-grid-areas": "^3.0.1",
     "@storybook/addon-actions": "^7.0.0-beta.58",
     "@storybook/addon-essentials": "^7.0.0-beta.58",
     "@storybook/addon-interactions": "^7.0.0-beta.58",
@@ -84,6 +85,7 @@
     "typescript": "^4.9.5",
     "vite": "^4.1.0",
     "vite-plugin-fonts": "^0.7.0",
+    "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.0.5",
     "wrangler": "^2.9.1",
     "zod": "^3.20.6"
