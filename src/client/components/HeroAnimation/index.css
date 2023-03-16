@@ -1,0 +1,14 @@
+
+.first-box {
+  animation: fwd-center 3s linear infinite;
+  animation-name: fwd-center;
+}
+
+@keyframes fwd-center {
+  0% {
+    transform: translateZ(0);
+  }
+  100% {
+    transform: translateZ(100vw);
+  }
+}

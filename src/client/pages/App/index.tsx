@@ -18,20 +18,32 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={cn('grid h-screen grid-rows-[1fr] px-4')}>
+      <div
+        className={cn('grid h-screen grid-rows-[1fr] px-4 ')}
+      >
+        {/* <div className={cn('fixed inset-0 grid h-screen')}>
+          <Logo />
+        </div> */}
         <main
           role="main"
           className={cn(
-            'container-type-inline mx-auto grid w-full grid-cols-[auto_auto] place-content-center gap-6 @container/App'
+            'container-type-inline mx-auto grid w-full grid-cols-[auto_auto] justify-center gap-20 @container/App'
           )}
         >
-          <div className={cn('self-center')}>
+          <div
+            // 親コンテナが640px以上なら350px, それ以外は親コンテナの40%
+            className={cn('w-[40cqw] self-center @[640px]/App:max-w-[350px]')}
+          >
             <TodoForm />
           </div>
-          <div className={cn('max-h-[100svh] overflow-auto')}>
+          <div
+            className={cn(
+              'max-h-[100svh] w-[40cqw] overflow-auto @[640px]/App:max-w-[600px]'
+            )}
+          >
             <TodoList />
           </div>
-          <div className={cn('absolute bottom-0 left-0 scale-50')}>
+          <div className={cn('absolute top-0 left-0 scale-50')}>
             <Logo />
           </div>
         </main>

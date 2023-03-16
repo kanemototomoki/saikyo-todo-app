@@ -2,12 +2,6 @@
   animation: logo-text 6s ease-in-out infinite;
 }
 
-.logo_text {
-  animation-name: logo-text;
-  transform: translateX(300px);
-  opacity: 0;
-}
-
 @keyframes logo-text {
   0% {
     opacity: 0;

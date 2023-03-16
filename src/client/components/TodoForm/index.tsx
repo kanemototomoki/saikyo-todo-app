@@ -44,10 +44,7 @@ export default function TodoForm() {
     <form
       role="form"
       onSubmit={handleSubmit(onSubmit)}
-      // 親コンテナが640px以上なら600px, それ以外は親コンテナの80%
-      className={cn(
-        'grid w-[40cqw] gap-y-4 @[640px]/App:max-w-[350px] place-items-center'
-      )}
+      className={cn('grid place-items-center gap-y-4')}
     >
       {/* <input
         type="text"
