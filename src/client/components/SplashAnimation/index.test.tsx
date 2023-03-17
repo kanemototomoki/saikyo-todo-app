@@ -1,9 +1,9 @@
-import HeroAnimation from '.'
 import { render, screen } from '@testing-library/react'
+import SplashAnimation from '.'
 
-describe('HeroAnimation', () => {
+describe('SplashAnimation', () => {
   it('コンポーネントが存在すること', () => {
-    render(<HeroAnimation />)
+    render(<SplashAnimation />)
     expect(screen.getByText('test')).toBeInTheDocument()
   })
 })

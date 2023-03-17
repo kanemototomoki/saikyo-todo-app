@@ -1,19 +1,19 @@
 import { type Meta, type StoryObj } from '@storybook/react'
-import Logo from '.'
+import SplashAnimation from '.'
 
 const meta = {
-  title: 'components/Logo',
-  component: Logo,
+  title: 'components/SplashAnimation',
+  component: SplashAnimation,
   parameters: {},
-  args: {},
   decorators: [
     (Story) => (
-      <div style={{ paddingTop: '10px', overflow: 'hidden' }}>
+      <div style={{ overflow: 'hidden' }}>
         <Story />
       </div>
     )
-  ]
-} satisfies Meta<typeof Logo>
+  ],
+  args: {}
+} satisfies Meta<typeof SplashAnimation>
 
 export default meta
 type Story = StoryObj<typeof meta>

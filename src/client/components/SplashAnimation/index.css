@@ -1,0 +1,106 @@
+:where(.background) {
+  --animation-time: 0.5s;
+  --transform-scale: 150;
+}
+
+:where(.background) .ele {
+  animation: forward-center var(--animation-time) linear;
+  opacity: 0;
+}
+
+.second-box {
+  animation-delay: calc(var(--animation-time) * 1 - 0.3s);
+}
+
+.third-box {
+  animation: forward-center_to_back-center calc(var(--animation-time) * 2)
+    linear calc(var(--animation-time) * 1) forwards;
+}
+
+/* 奥から手前に */
+@keyframes forward-center {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(var(--transform-scale));
+    opacity: 1;
+  }
+}
+
+/* 奥から手前、再度奥に */
+@keyframes forward-center_to_back-center {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(var(--transform-scale));
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 1;
+    border-radius: 50%;
+  }
+}
+
+.splash-text {
+  opacity: 0;
+  animation: splash-text var(--animation-time) linear forwards
+    calc(var(--animation-time) * 2);
+}
+
+@keyframes splash-text {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+#splash_text path {
+  fill: #111;
+  stroke: #111;
+  stroke-width: 0.3px;
+}
+
+.splash-text path {
+  animation: svg 5s ease-in forwards;
+}
+
+@keyframes svg {
+  0% {
+    fill: transparent;
+    stroke-dasharray: 2000px;
+    stroke-dashoffset: 2000px;
+  }
+  70% {
+    fill: transparent;
+    stroke-dashoffset: 0;
+  }
+  90% {
+    fill: #111;
+  }
+}
+
+.splash-animation.background {
+  animation: fadeOut 1s linear 5s forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  99% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

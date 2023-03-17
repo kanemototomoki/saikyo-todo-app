@@ -4,6 +4,7 @@ import Logo from '@client/components/Logo'
 import TodoForm from '@client/components/TodoForm'
 import TodoList from '@client/components/TodoList'
 import { cn } from '@client/lib/utils'
+import SplashAnimation from '../../components/SplashAnimation'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,15 +20,21 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div
-        className={cn('grid h-screen grid-rows-[1fr] px-4 ')}
+        className={cn(
+          'grid h-screen grid-rows-[1fr] px-4 grid-areas-[root-center]'
+        )}
       >
         {/* <div className={cn('fixed inset-0 grid h-screen')}>
           <Logo />
         </div> */}
+
+        <div className={cn('grid-in-[root-center]')}>
+          <SplashAnimation />
+        </div>
         <main
           role="main"
           className={cn(
-            'container-type-inline mx-auto grid w-full grid-cols-[auto_auto] justify-center gap-20 @container/App'
+            'container-type-inline mx-auto grid w-full grid-cols-[auto_auto] justify-center gap-20 @container/App grid-in-[root-center]'
           )}
         >
           <div
