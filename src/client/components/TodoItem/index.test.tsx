@@ -8,7 +8,8 @@ describe('TodoItem', () => {
       title: 'test',
       created_at: '1234',
       is_done: '1'
-    }
+    },
+    orderId: 1
   }
   it('コンポーネントが存在すること', () => {
     render(<TodoItem {...mockProps} />)

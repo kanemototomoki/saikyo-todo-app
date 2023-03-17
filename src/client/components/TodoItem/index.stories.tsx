@@ -17,7 +17,8 @@ export const Primary: Story = {
       id: '1',
       title: 'test',
       created_at: '1234',
-      is_done: '1'
-    }
+      is_done: '1',
+    },
+    orderId: 1
   }
 }

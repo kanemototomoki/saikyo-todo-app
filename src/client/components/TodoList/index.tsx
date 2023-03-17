@@ -24,6 +24,8 @@ export default function TodoList() {
         (entries) => {
           for (const entry of entries) {
             if (entry.isIntersecting && displayTodo.length !== 0) {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
               entry.target.style.backgroundColor = 'pink'
 
               if (
@@ -94,7 +96,7 @@ export default function TodoList() {
       ...todo,
       orderId: i + 1
     }))
-    
+
     if (addOrderIdTodo.length <= 15) {
       setDisplayTodo(() => addOrderIdTodo)
       return
@@ -113,6 +115,8 @@ export default function TodoList() {
     setTimeout(() => {
       const ele = document.querySelector(`li[data-index="${firstTodoId}"]`)
       if (ele) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         ele.style.backgroundColor = 'blue'
         ele.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }
