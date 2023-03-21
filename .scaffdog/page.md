@@ -3,7 +3,7 @@ name: 'page'
 description: 'Generate React page'
 root: './src/client/page/'
 output: '.'
-ignore: []
+ignore: ['**/*']
 questions:
   name: 'Please enter component name'
 ---

@@ -35,9 +35,12 @@
     transform: scale(0);
     opacity: 1;
   }
-  50% {
+  40% {
     transform: scale(var(--transform-scale));
     opacity: 1;
+  }
+  55% {
+    border-radius: 50%;
   }
   100% {
     transform: scale(0);
@@ -68,7 +71,7 @@
 }
 
 .splash-text path {
-  animation: svg 5s ease-in forwards;
+  animation: svg 3s ease-in forwards;
 }
 
 @keyframes svg {
@@ -87,7 +90,7 @@
 }
 
 .splash-animation.background {
-  animation: fadeOut 1s linear 5s forwards;
+  animation: fadeOut 1s linear 3s forwards;
 }
 
 @keyframes fadeOut {

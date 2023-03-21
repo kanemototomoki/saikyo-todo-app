@@ -1,4 +1,5 @@
 import { cn } from '@client/lib/utils'
+import LogoGlitch from '../LogoGlitch'
 import './index.css'
 // eslint-disable-next-line import/no-absolute-path
 import { ReactComponent as SplashText } from '/public/splash_text.svg'
@@ -27,7 +28,11 @@ export default function SplashAnimation() {
             'ele third-box z-10 h-[1vw] w-[1vw] bg-black grid-in-[center]'
           )}
         />
-        <SplashText className={cn('splash-text z-20 w-[20vw] h-[20vh] grid-in-[center]')} />
+        <div
+          className={cn('splash-text z-20 h-[200px] w-full grid-in-[center]')}
+        >
+          <LogoGlitch />
+        </div>
       </div>
     </>
   )
