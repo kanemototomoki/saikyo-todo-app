@@ -1,10 +1,10 @@
 import './index.scss'
 
-export default function LogoGlitch() {
+export default function LogoGlitch1() {
   return (
     <>
       <div
-        className="glitch"
+        className="glitch1"
         style={{
           backgroundImage: `url(/public/logo_text.svg)`,
           backgroundRepeat: 'no-repeat',

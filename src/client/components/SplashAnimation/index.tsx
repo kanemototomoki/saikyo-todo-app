@@ -1,5 +1,5 @@
 import { cn } from '@client/lib/utils'
-import LogoGlitch from '../LogoGlitch'
+import LogoGlitch from '../LogoGlitch1'
 import './index.css'
 // eslint-disable-next-line import/no-absolute-path
 import { ReactComponent as SplashText } from '/public/splash_text.svg'

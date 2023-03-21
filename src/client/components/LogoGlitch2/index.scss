@@ -1,0 +1,177 @@
+@use 'sass:math';
+
+@mixin glitch-anim($id) {
+  @content;
+
+  $steps: 30;
+  @keyframes glitch-anim-#{$id} {
+    @for $i from 0 through $steps {
+      $percent: percentage($i * (math.div(1, $steps)));
+      $top: random(85);
+      $bottom: random(101 - $top);
+      $p_top: percentage((math.div($top, 100)));
+      $p_bottom: percentage((math.div($bottom, 100)));
+
+      $clip_path: inset(#{$p_top} 0 #{$p_bottom} 0);
+      #{ $percent } {
+        clip-path: $clip_path;
+      }
+    }
+  }
+}
+
+@function rand($min, $max) {
+  @return random() * ($max - $min) + $min;
+}
+
+$animation-duration: 2.5s;
+$glitch-duration: 10%;
+$glitch-frequency: 20;
+$glitch-interval: math.div($glitch-duration, $glitch-frequency);
+@mixin rgb-shift($name) {
+  @keyframes rgb-shift-#{$name} {
+    @for $i from 0 to $glitch-frequency {
+      #{$i * $glitch-interval} {
+        transform: translate(#{rand(-2, 4) * 1%}, #{rand(-0.5, 1) * 1%});
+      }
+    }
+
+    #{$glitch-duration},
+    100% {
+      transform: none;
+    }
+  }
+
+  animation: rgb-shift-#{$name} $animation-duration steps(1, jump-end) infinite alternate
+    both;
+}
+
+@mixin glitch($name) {
+  @keyframes glitch-#{$name} {
+    @for $i from 0 to $glitch-frequency {
+      $left: 0%;
+      $right: 100%;
+      $top: rand(0, 90) * 1%;
+      $bottom: $top + rand(1, 10) * 1%;
+
+      #{$i * $glitch-interval} {
+        clip-path: polygon(
+          $left $top,
+          $right $top,
+          $right $bottom,
+          $left $bottom
+        );
+        transform: translate(#{rand(-8, 8) * 1%}, #{rand(-0.5, 0.5) * 1%});
+      }
+    }
+
+    #{$glitch-duration},
+    80% {
+      clip-path: none;
+      transform: none;
+    }
+  }
+
+  animation: glitch-#{$name} $animation-duration linear infinite alternate both;
+}
+
+.glitch2 {
+  .saikyo,
+  .todoapp {
+    font-size: 100px;
+    margin: 0 auto;
+    width: max-content;
+    text-align: center;
+    position: relative;
+
+    &::after {
+      @include glitch(after);
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      overflow: hidden;
+    }
+
+    &::before {
+      @include glitch(before);
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      overflow: hidden;
+    }
+  }
+
+  .saikyo {
+    mix-blend-mode: screen;
+
+    &::before {
+      transform: translate(4px, -3px);
+      @include glitch-anim(1) {
+        animation: glitch-anim-1 8s infinite linear alternate-reverse;
+      }
+    }
+
+    .r {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: rgb(255, 0, 0);
+      mix-blend-mode: multiply;
+      @include rgb-shift(r);
+    }
+    .g {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: rgb(0, 255, 0);
+      mix-blend-mode: multiply;
+      @include rgb-shift(b);
+    }
+    .b {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: rgb(0, 0, 255);
+      mix-blend-mode: multiply;
+      @include rgb-shift(g);
+    }
+  }
+
+  .todoapp {
+    mix-blend-mode: screen;
+
+    &::before {
+      transform: translate(1px, -1px);
+      @include glitch-anim(2) {
+        animation: glitch-anim-2 9s infinite linear alternate-reverse;
+      }
+    }
+
+    .r {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: rgb(255, 0, 0);
+      mix-blend-mode: multiply;
+      @include rgb-shift(r);
+    }
+    .g {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: rgb(0, 255, 0);
+      mix-blend-mode: multiply;
+      @include rgb-shift(g);
+    }
+    .b {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: rgb(0, 0, 255);
+      mix-blend-mode: multiply;
+      @include rgb-shift(b);
+    }
+  }
+}

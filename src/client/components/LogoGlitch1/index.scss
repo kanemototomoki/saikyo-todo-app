@@ -24,7 +24,7 @@
   @return random() * ($max - $min) + $min;
 }
 
-$animation-duration: 1.5s;
+$animation-duration: 3.5s;
 $glitch-duration: 30%;
 $glitch-frequency: 20;
 $glitch-interval: math.div($glitch-duration, $glitch-frequency);
@@ -32,7 +32,7 @@ $glitch-interval: math.div($glitch-duration, $glitch-frequency);
   @keyframes rgb-shift-#{$name} {
     @for $i from 0 to $glitch-frequency {
       #{$i * $glitch-interval} {
-        transform: translate(#{rand(-2, 2) * 1%}, #{rand(-0.5, 0.5) * 1%});
+        transform: translate(#{rand(-2, 2) * 1%}, #{rand(-0.5, 1.5) * 1%});
       }
     }
 
@@ -61,12 +61,11 @@ $glitch-interval: math.div($glitch-duration, $glitch-frequency);
           $right $bottom,
           $left $bottom
         );
-        transform: translate(#{rand(-8, 8) * 1%}, #{rand(-0.5, 0.5) * 1%});
+        transform: translate(#{rand(-8, 8) * 1%}, #{rand(-0.5, 2.5) * 1%});
       }
     }
 
     #{$glitch-duration},
-    80%,
     93% {
       clip-path: none;
       transform: none;
@@ -76,26 +75,20 @@ $glitch-interval: math.div($glitch-duration, $glitch-frequency);
   animation: glitch-#{$name} $animation-duration linear infinite alternate both;
 }
 
-body {
-  margin: 0;
-}
-
-.glitch {
+.glitch1 {
   background-size: 0;
   height: 200px;
   position: relative;
   overflow: hidden;
+  clip-path: inset(2% 5% 5% 5%);
 
   &::before,
   &::after,
   .channel {
     background: inherit;
     background-size: cover;
-    bottom: 0;
-    left: 0;
     position: absolute;
-    right: 0;
-    top: 0;
+    inset: 0;
   }
 
   &::before {
@@ -112,20 +105,16 @@ body {
     mix-blend-mode: screen;
 
     &::before {
-      bottom: 0;
       content: '';
       display: block;
       mix-blend-mode: multiply;
       position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
+      inset: 0;
     }
   }
 
   .r {
     @include rgb-shift(r);
-
     &::before {
       background: rgb(255, 0, 0);
     }
@@ -133,7 +122,6 @@ body {
 
   .g {
     @include rgb-shift(g);
-
     &::before {
       background: rgb(0, 255, 0);
     }
@@ -141,7 +129,6 @@ body {
 
   .b {
     @include rgb-shift(b);
-
     &::before {
       background: rgb(0, 0, 255);
     }

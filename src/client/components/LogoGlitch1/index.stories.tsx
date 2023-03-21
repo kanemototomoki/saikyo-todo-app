@@ -1,13 +1,13 @@
 import { type Meta, type StoryObj } from '@storybook/react';
-import LogoGlitch from '.';
+import LogoGlitch1 from '.';
 
 
 const meta = {
-  title: 'components/LogoGlitch',
-  component: LogoGlitch,
+  title: 'components/LogoGlitch1',
+  component: LogoGlitch1,
   parameters: {},
   args: {}
-} satisfies Meta<typeof LogoGlitch>
+} satisfies Meta<typeof LogoGlitch1>
 
 export default meta
 type Story = StoryObj<typeof meta>
