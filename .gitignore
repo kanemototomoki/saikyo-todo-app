@@ -13,6 +13,8 @@ dist-ssr
 *.local
 pages
 .wrangler
+coverage
+storybook-static
 
 # Editor directories and files
 .vscode/*

@@ -28,7 +28,6 @@ export default function TodoForm() {
     mutate({
       title: data.title
     })
-    // console.warn({ isSuccess, isError })
     formReset()
   }
 
@@ -46,14 +45,6 @@ export default function TodoForm() {
       onSubmit={handleSubmit(onSubmit)}
       className={cn('grid place-items-center gap-y-4')}
     >
-      {/* <input
-        type="text"
-        placeholder="Task"
-        {...register('title')}
-        className={cn(
-          'col-span-4 w-full rounded-md border border-gray-300 py-2 px-3'
-        )}
-      /> */}
       <div className={cn('relative col-span-5 w-full')}>
         <input
           type="text"
@@ -91,9 +82,6 @@ export default function TodoForm() {
       >
         追加
       </button>
-      {/* <p className={cn('col-span-2 h-[2cqh] text-sm text-red-500')}>
-        {errors.title?.message || ' '}
-      </p> */}
     </form>
   )
 }

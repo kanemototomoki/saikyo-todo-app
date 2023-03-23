@@ -30,7 +30,7 @@ export const baseTodoSchema = z.object({
     .min(1, {
       message: 'Task is required'
     })
-    .max(10),
+    .max(50),
   isDone: z.string()
 })
 export type BaseTodoSchema = z.infer<typeof baseTodoSchema>
