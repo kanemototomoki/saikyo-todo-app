@@ -24,15 +24,15 @@
   @return random() * ($max - $min) + $min;
 }
 
-$animation-duration: 3.5s;
-$glitch-duration: 30%;
-$glitch-frequency: 20;
+$animation-duration: 3s;
+$glitch-duration: 50%;
+$glitch-frequency: 50;
 $glitch-interval: math.div($glitch-duration, $glitch-frequency);
 @mixin rgb-shift($name) {
   @keyframes rgb-shift-#{$name} {
     @for $i from 0 to $glitch-frequency {
       #{$i * $glitch-interval} {
-        transform: translate(#{rand(-2, 2) * 1%}, #{rand(-0.5, 1.5) * 1%});
+        transform: translate(#{rand(-1, 1) * 2%}, #{rand(-0.5, 1.5) * 1%});
       }
     }
 
@@ -42,8 +42,8 @@ $glitch-interval: math.div($glitch-duration, $glitch-frequency);
     }
   }
 
-  animation: rgb-shift-#{$name} $animation-duration steps(1, jump-end) infinite alternate
-    both;
+  animation: rgb-shift-#{$name} $animation-duration steps(1, jump-end) forwards;
+  animation-delay: 3s;
 }
 
 @mixin glitch($name) {
@@ -66,21 +66,22 @@ $glitch-interval: math.div($glitch-duration, $glitch-frequency);
     }
 
     #{$glitch-duration},
-    93% {
+    95% {
       clip-path: none;
       transform: none;
     }
   }
 
-  animation: glitch-#{$name} $animation-duration linear infinite alternate both;
+  animation: glitch-#{$name} $animation-duration linear forwards;
+  animation-delay: 3s;
 }
 
 .glitch1 {
   background-size: 0;
-  height: 200px;
+  height: 300px;
   position: relative;
   overflow: hidden;
-  clip-path: inset(2% 5% 5% 5%);
+  clip-path: inset(3% 3% 3% 5%);
 
   &::before,
   &::after,
@@ -118,6 +119,16 @@ $glitch-interval: math.div($glitch-duration, $glitch-frequency);
     &::before {
       background: rgb(255, 0, 0);
     }
+
+    // &::after {
+    //   left: -3px;
+    //   background: black;
+    //   mask: url(/public/logo_text.svg) no-repeat center center;
+    //   mask-size: cover;
+    //   @include glitch-anim(1) {
+    //     animation: glitch-anim-1 3s linear infinite alternate-reverse;
+    //   }
+    // }
   }
 
   .g {
@@ -125,6 +136,16 @@ $glitch-interval: math.div($glitch-duration, $glitch-frequency);
     &::before {
       background: rgb(0, 255, 0);
     }
+
+    // &::after {
+    //   transform: translate(-4px, 2px);
+    //   background: black;
+    //   mask: url(/public/logo_text.svg) no-repeat center center;
+    //   mask-size: cover;
+    //   @include glitch-anim(2) {
+    //     animation: glitch-anim-2 13s linear infinite alternate-reverse;
+    //   }
+    // }
   }
 
   .b {
@@ -132,5 +153,15 @@ $glitch-interval: math.div($glitch-duration, $glitch-frequency);
     &::before {
       background: rgb(0, 0, 255);
     }
+
+    // &::after {
+    //   left: -10px;
+    //   background: black;
+    //   mask: url(/public/logo_text.svg) no-repeat center center;
+    //   mask-size: cover;
+    //   @include glitch-anim(3) {
+    //     animation: glitch-anim-3 5s linear infinite alternate-reverse;
+    //   }
+    // }
   }
 }

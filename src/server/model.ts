@@ -1,9 +1,8 @@
-import type { D1Database } from '@cloudflare/workers-types';
-import { zValidator } from '@hono/zod-validator';
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { z } from 'zod';
-
+import type { D1Database } from '@cloudflare/workers-types'
+import { zValidator } from '@hono/zod-validator'
+import { Hono } from 'hono'
+import { cors } from 'hono/cors'
+import { z } from 'zod'
 
 type Bindings = {
   DB: D1Database
@@ -75,7 +74,6 @@ const CURSOR_SIZE = 10
 const route = app
   .post('/todos', zValidator('form', postTodoSchema), async (c) => {
     const { title } = c.req.valid('form')
-
     const res = await c.env.DB.prepare('INSERT INTO todos (title) VALUES (?);')
       .bind(title)
       .run()
@@ -137,6 +135,7 @@ const route = app
     const todoId = c.req.param('id')
     const json = c.req.valid('json')
     let res = null
+    // TODO: もうちょいマシな書き方ないかな？
     if ('title' in json) {
       res = await c.env.DB.prepare('UPDATE todos SET title = ? WHERE id = ?;')
         .bind(json.title, todoId)
@@ -154,13 +153,13 @@ const route = app
   })
   .delete('/todos/:id', async (c) => {
     const todoId = c.req.param('id')
-    const res = await c.env.DB.prepare('DELETE FROM todos WHERE id = ?;')
+    const result = await c.env.DB.prepare('DELETE FROM todos WHERE id = ?;')
       .bind(todoId)
       .run()
 
     return c.jsonT({
       ok: true,
-      id: res.meta.last_row_id as number
+      id: result.meta.last_row_id as number
     })
   })
 

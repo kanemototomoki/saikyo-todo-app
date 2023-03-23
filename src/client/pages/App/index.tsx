@@ -24,10 +24,6 @@ function App() {
           'grid h-screen grid-rows-[1fr] px-4 grid-areas-[root-center]'
         )}
       >
-        {/* <div className={cn('fixed inset-0 grid h-screen')}>
-          <Logo />
-        </div> */}
-
         <div className={cn('grid-in-[root-center]')}>
           <SplashAnimation />
         </div>
