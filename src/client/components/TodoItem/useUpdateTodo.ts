@@ -1,6 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { UpdateTodoSchema, ParamTodoId } from '@server/model'
-import { updateTodo } from '@client/api/todos'
+import {
+  type UpdateTodoSchema,
+  type ParamTodoId,
+  updateTodo
+} from '@client/api/todos'
 
 type SuccessResponse = Awaited<ReturnType<typeof updateTodo>>
 export const useUpdateTodo = () => {

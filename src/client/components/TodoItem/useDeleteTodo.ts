@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { type DeleteTodoSchema } from '@server/model'
-import { deleteTodo } from '@client/api/todos'
+import { type DeleteTodoSchema, deleteTodo } from '@client/api/todos'
 
 type SuccessResponse = Awaited<ReturnType<typeof deleteTodo>>
 export const useDeleteTodo = () => {

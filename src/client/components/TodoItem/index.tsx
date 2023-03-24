@@ -3,7 +3,7 @@ import type {
   DeleteTodoSchema,
   UpdateTodoIsDoneSchema, // UpdateTodoContentSchema,
   ParamTodoId
-} from '@server/model'
+} from '@client/api/todos'
 import { cn } from '@client/lib/utils'
 import { useDeleteTodo } from './useDeleteTodo'
 import { useUpdateTodo } from './useUpdateTodo'

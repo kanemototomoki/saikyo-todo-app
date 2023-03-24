@@ -15,7 +15,7 @@ const queryClient = new QueryClient({
 })
 
 function App() {
-  const isDev = import.meta.env.DEV
+  const isDev = process.env.DEV
 
   return (
     <QueryClientProvider client={queryClient}>

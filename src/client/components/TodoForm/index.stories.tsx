@@ -28,21 +28,18 @@ export const Primary: Story = {
 
 export const Submit: Story = {
   args: {},
-  parameters: {
-    moduleMock: {
-      mock: () => {
-        const mock = createMock<typeof useAddTodo>(useAddTodo)
-        return mock
-      }
-    }
-  },
-  play: async ({ canvasElement, parameters }) => {
+  parameters: {},
+  play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     await waitFor(() => {
       userEvent.click(canvas.getByRole('button', { name: '追加' }))
     })
     await waitFor(() => {
-      expect(canvas.getByPlaceholderText('Task')).toBeInTheDocument()
+      expect(canvas.getByRole('alert')).toBeNull()
     })
   }
 }
+
+/**
+ * タイトルを10文字入力して、追加ボタンを押下する
+ */

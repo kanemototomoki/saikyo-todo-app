@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { postTodoSchema, type PostTodoSchema } from '@server/model'
+import { postTodoSchema, type PostTodoSchema } from '@client/api/todos'
 import { cn } from '@client/lib/utils'
 import { useAddTodo } from './useAddTodo'
 
