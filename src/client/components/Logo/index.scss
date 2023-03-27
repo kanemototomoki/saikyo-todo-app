@@ -1,0 +1,37 @@
+
+.logo :where(#TODOAPP, #SAIKYO) path {
+    animation: logo-text 6s ease-in-out infinite;
+  }
+
+
+@keyframes logo-text {
+  0% {
+    opacity: 0;
+    transform: translateX(150px);
+  }
+
+  20%,
+  80% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  85% {
+    opacity: 0;
+    transform: translateX(-150px);
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+$ids: ('S1', "A1", 'I1', 'K1', 'Y1', 'O1', 'T1', 'O2', 'D1', 'O3', 'A2', 'P1', 'P2');
+.logo #logo_text {
+  @each $id in $ids {
+    $i: index($ids, $id);
+    #{'#' + $id} {
+      animation-delay: $i * 0.1s;
+    }
+  }
+}

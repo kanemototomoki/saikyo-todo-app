@@ -1,17 +1,18 @@
 import type {
   TodoResponseSchema,
   DeleteTodoSchema,
-  UpdateTodoIsDoneSchema,
-  UpdateTodoContentSchema,
+  UpdateTodoIsDoneSchema, // UpdateTodoContentSchema,
   ParamTodoId
-} from '@server/model'
+} from '@client/api/todos'
+import { cn } from '@client/lib/utils'
 import { useDeleteTodo } from './useDeleteTodo'
 import { useUpdateTodo } from './useUpdateTodo'
 
 export type Props = {
   todo: TodoResponseSchema
+  orderId: number | undefined
 }
-export default function TodoItem({ todo }: Props) {
+export default function TodoItem({ todo, orderId }: Props) {
   const deleteMutation = useDeleteTodo()
   const updateMutation = useUpdateTodo()
   const handleDelete = ({ id }: DeleteTodoSchema) => {
@@ -28,23 +29,30 @@ export default function TodoItem({ todo }: Props) {
       isDone
     })
   }
-  const handleEdit = ({ id, title }: ParamTodoId & UpdateTodoContentSchema) => {
-    updateMutation.mutate({
-      id,
-      title
-    })
-  }
+  // const handleEdit = ({ id, title }: ParamTodoId & UpdateTodoContentSchema) => {
+  //   updateMutation.mutate({
+  //     id,
+  //     title
+  //   })
+  // }
   return (
     <>
-      <button
+      {/* <button
         className="rounded bg-gray-500 py-2 px-4 font-bold text-white hover:bg-gray-600"
         onClick={() => {
           handleEdit({ id: todo.id, title: 'sample' })
         }}
       >
         Edit
-      </button>
-      <h3 className="text-lg font-medium">{todo.title}</h3>
+      </button> */}
+      <p className={cn('text-3xl font-bold')}># {orderId}</p>
+      <h3
+        className={cn(
+          'max-w-[25ch] inline-block truncate'
+        )}
+      >
+        {todo.title}
+      </h3>
       <input
         type="checkbox"
         checked={Boolean(todo.is_done)}

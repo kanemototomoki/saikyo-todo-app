@@ -5,7 +5,7 @@ module.exports = {
   semi: false,
   useTabs: false,
   importOrder: [
-    '^(react(.*)/(.*)$)|^(react$)',
+    '^(react(.*)/(.*)$)|^react$',
     '<THIRD_PARTY_TS_TYPES>',
     '<THIRD_PARTY_MODULES>',
     '^types$',

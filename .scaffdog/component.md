@@ -3,7 +3,7 @@ name: 'component'
 description: 'Generate React Component'
 root: './src/client/components'
 output: '.'
-ignore: []
+ignore: ['**/*']
 questions:
   name: 'Please enter component name'
 ---

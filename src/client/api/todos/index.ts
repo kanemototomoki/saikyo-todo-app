@@ -8,6 +8,8 @@ import type {
   ParamTodoId
 } from '@server/model'
 
+export * from '@server/model'
+
 const url = import.meta.env.DEV ? 'http://localhost:8788/api' : 'api'
 const client = hc<AppType>(url)
 
@@ -39,6 +41,29 @@ export async function getAllTodo(): Promise<{
   return (await res.json()) as unknown as {
     ok: boolean
     todos: TodoResponseSchema[]
+  }
+}
+
+/**
+ * @desc Todo取得
+ */
+export async function getCursorTodo({ cursor }: { cursor: number }): Promise<{
+  ok: boolean
+  todos: TodoResponseSchema[]
+  next: string | null
+  prev: string | null
+}> {
+  const res = await client.todos.$get({
+    query: {
+      cursor
+    }
+  })
+  // https://github.com/honojs/hono/issues/950
+  return (await res.json()) as unknown as {
+    ok: boolean
+    todos: TodoResponseSchema[]
+    next: string | null
+    prev: string | null
   }
 }
 

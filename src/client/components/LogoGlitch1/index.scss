@@ -1,0 +1,167 @@
+@use 'sass:math';
+
+@mixin glitch-anim($id) {
+  @content;
+
+  $steps: 20;
+  @keyframes glitch-anim-#{$id} {
+    @for $i from 0 through $steps {
+      $percent: percentage($i * (math.div(1, $steps)));
+      $top: random(100);
+      $bottom: random(101 - $top);
+      $p_top: percentage((math.div($top, 100)));
+      $p_bottom: percentage((math.div($bottom, 100)));
+
+      $clip_path: inset(#{$p_top} 0 #{$p_bottom} 0);
+      #{ $percent } {
+        clip-path: $clip_path;
+      }
+    }
+  }
+}
+
+@function rand($min, $max) {
+  @return random() * ($max - $min) + $min;
+}
+
+$animation-duration: 3s;
+$glitch-duration: 50%;
+$glitch-frequency: 50;
+$glitch-interval: math.div($glitch-duration, $glitch-frequency);
+@mixin rgb-shift($name) {
+  @keyframes rgb-shift-#{$name} {
+    @for $i from 0 to $glitch-frequency {
+      #{$i * $glitch-interval} {
+        transform: translate(#{rand(-1, 1) * 2%}, #{rand(-0.5, 1.5) * 1%});
+      }
+    }
+
+    #{$glitch-duration},
+    100% {
+      transform: none;
+    }
+  }
+
+  animation: rgb-shift-#{$name} $animation-duration steps(1, jump-end) forwards;
+  animation-delay: 3s;
+}
+
+@mixin glitch($name) {
+  @keyframes glitch-#{$name} {
+    @for $i from 0 to $glitch-frequency {
+      $left: 20%;
+      $right: 80%;
+      $top: rand(0, 90) * 1%;
+      $bottom: $top + rand(1, 10) * 1%;
+
+      #{$i * $glitch-interval} {
+        clip-path: polygon(
+          $left $top,
+          $right $top,
+          $right $bottom,
+          $left $bottom
+        );
+        transform: translate(#{rand(-8, 8) * 1%}, #{rand(-0.5, 2.5) * 1%});
+      }
+    }
+
+    #{$glitch-duration},
+    95% {
+      clip-path: none;
+      transform: none;
+    }
+  }
+
+  animation: glitch-#{$name} $animation-duration linear forwards;
+  animation-delay: 3s;
+}
+
+.glitch1 {
+  background-size: 0;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  clip-path: inset(3% 3% 3% 5%);
+
+  &::before,
+  &::after,
+  .channel {
+    background: inherit;
+    background-size: cover;
+    position: absolute;
+    inset: 0;
+  }
+
+  &::before {
+    @include glitch(before);
+    content: '';
+  }
+
+  &::after {
+    @include glitch(after);
+    content: '';
+  }
+
+  .channel {
+    mix-blend-mode: screen;
+
+    &::before {
+      content: '';
+      display: block;
+      mix-blend-mode: multiply;
+      position: absolute;
+      inset: 0;
+    }
+  }
+
+  .r {
+    @include rgb-shift(r);
+    &::before {
+      background: rgb(255, 0, 0);
+    }
+
+    // &::after {
+    //   left: -3px;
+    //   background: black;
+    //   mask: url(/public/logo_text.svg) no-repeat center center;
+    //   mask-size: cover;
+    //   @include glitch-anim(1) {
+    //     animation: glitch-anim-1 3s linear infinite alternate-reverse;
+    //   }
+    // }
+  }
+
+  .g {
+    @include rgb-shift(g);
+    &::before {
+      background: rgb(0, 255, 0);
+    }
+
+    // &::after {
+    //   transform: translate(-4px, 2px);
+    //   background: black;
+    //   mask: url(/public/logo_text.svg) no-repeat center center;
+    //   mask-size: cover;
+    //   @include glitch-anim(2) {
+    //     animation: glitch-anim-2 13s linear infinite alternate-reverse;
+    //   }
+    // }
+  }
+
+  .b {
+    @include rgb-shift(b);
+    &::before {
+      background: rgb(0, 0, 255);
+    }
+
+    // &::after {
+    //   left: -10px;
+    //   background: black;
+    //   mask: url(/public/logo_text.svg) no-repeat center center;
+    //   mask-size: cover;
+    //   @include glitch-anim(3) {
+    //     animation: glitch-anim-3 5s linear infinite alternate-reverse;
+    //   }
+    // }
+  }
+}
