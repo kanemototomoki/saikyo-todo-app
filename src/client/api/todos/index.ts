@@ -10,7 +10,7 @@ import type {
 
 export * from '@server/model'
 
-const url = process.env.DEV ? 'http://localhost:8788/api' : 'api'
+const url = import.meta.env.DEV ? 'http://localhost:8788/api' : 'api'
 const client = hc<AppType>(url)
 
 /**

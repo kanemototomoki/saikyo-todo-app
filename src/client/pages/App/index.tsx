@@ -15,7 +15,7 @@ const queryClient = new QueryClient({
 })
 
 function App() {
-  const isDev = process.env.DEV
+  const isDev = import.meta.env.DEV
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -34,10 +34,12 @@ function App() {
           )}
         >
           <div
-            // 親コンテナが640px以上なら350px, それ以外は親コンテナの40%
-            className={cn('w-[40cqw] self-center @[640px]/App:max-w-[350px]')}
+            className={cn('w-[40cqw] self-center @[640px]/App:max-w-[400px] mt-[30cqh]')}
           >
             <TodoForm />
+            <div className={cn('scale-[.70] grid place-content-center')}>
+              <Logo />
+            </div>
           </div>
           <div
             className={cn(
@@ -45,9 +47,6 @@ function App() {
             )}
           >
             <TodoList />
-          </div>
-          <div className={cn('absolute top-0 left-0 scale-50')}>
-            <Logo />
           </div>
         </main>
         {isDev && <ReactQueryDevtools initialIsOpen={false} />}

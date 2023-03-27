@@ -48,7 +48,7 @@ export default function TodoItem({ todo, orderId }: Props) {
       <p className={cn('text-3xl font-bold')}># {orderId}</p>
       <h3
         className={cn(
-          'first-letter:float-left first-letter:mr-3 first-letter:text-5xl first-letter:font-bold first-letter:text-slate-900 first-line:uppercase first-line:tracking-widest'
+          'max-w-[25ch] inline-block truncate'
         )}
       >
         {todo.title}

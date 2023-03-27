@@ -1,9 +1,14 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { TodoResponseSchema } from '@server/model'
-import TodoItem from '@client/components/TodoItem'
-import { cn } from '../../lib/utils'
-import { useGetAllTodo } from './useGetAllTodo'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { TodoResponseSchema } from '@server/model';
+import TodoItem from '@client/components/TodoItem';
+import { cn } from '../../lib/utils';
+import { useGetAllTodo } from './useGetAllTodo';
 
+
+// 画面内に表示するTODOの数
+const DISPLAY_TODO_COUNT = 7
+// 無限スクロールをONにする閾値
+const INFINITY_SCROLL_THRESHOLD = DISPLAY_TODO_COUNT + 3
 export type Props = {}
 export default function TodoList() {
   const { data } = useGetAllTodo()
@@ -12,10 +17,8 @@ export default function TodoList() {
     useState<Array<TodoResponseSchema & { orderId?: number }>>(allTodo)
   const observeTargetBottom = useRef<{
     index: number | string
-    isShow: boolean
   }>({
-    index: 0,
-    isShow: false
+    index: 0
   })
 
   const createObserver = useMemo(
@@ -24,26 +27,21 @@ export default function TodoList() {
         (entries) => {
           for (const entry of entries) {
             if (entry.isIntersecting && displayTodo.length !== 0) {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
-              entry.target.style.backgroundColor = 'pink'
-
               if (
                 (entry.target as HTMLElement).dataset.index ===
                 observeTargetBottom.current.index
               ) {
                 // topの要素を削ってbottomに追加する
-                const count = Math.min(10, Math.floor(displayTodo.length / 5))
+                const count = Math.min(
+                  DISPLAY_TODO_COUNT,
+                  Math.floor(displayTodo.length / 5)
+                )
                 const start = 0
                 const copyTodo = [...displayTodo]
                 const cutTodo = copyTodo.splice(start, count)
                 setDisplayTodo(() => {
                   return [...copyTodo, ...cutTodo]
                 })
-
-                console.log(observeTargetBottom.current)
-
-                // debugger
               }
             }
           }
@@ -61,11 +59,11 @@ export default function TodoList() {
     const observer = createObserver
 
     function observe() {
-      if (displayTodo.length <= 15) {
+      if (displayTodo.length <= INFINITY_SCROLL_THRESHOLD) {
         return
       }
       // 下から二番目くらいの要素を監視する
-      const point = displayTodo.length >= 15 ? -2 : -1
+      const point = displayTodo.length >= INFINITY_SCROLL_THRESHOLD ? -2 : -1
       const ele = document.querySelector(
         `li[data-index="${displayTodo.at(point)?.orderId || ''}"`
       )
@@ -73,8 +71,7 @@ export default function TodoList() {
         observer.observe(ele)
 
         observeTargetBottom.current = {
-          index: (ele as HTMLLIElement).dataset.index!,
-          isShow: false
+          index: (ele as HTMLLIElement).dataset.index!
         }
       }
     }
@@ -88,39 +85,13 @@ export default function TodoList() {
     }
   }, [createObserver, displayTodo])
 
-  /**
-   * 初期描画の処理
-   */
   useEffect(() => {
     const addOrderIdTodo = [...allTodo].map((todo, i) => ({
       ...todo,
       orderId: i + 1
     }))
 
-    if (addOrderIdTodo.length <= 15) {
-      setDisplayTodo(() => addOrderIdTodo)
-      return
-    }
-
-    const firstTodoId = addOrderIdTodo[0]?.orderId
-    const len = addOrderIdTodo.length
-    const count = Math.min(10, Math.floor(len / 5))
-    const start = len - count
-    const cutTodo = addOrderIdTodo.splice(start, count)
-    setDisplayTodo(() => {
-      return [...cutTodo, ...addOrderIdTodo]
-    })
-
-    // 一番若いIDの要素を画面中央にスクロールさせる
-    setTimeout(() => {
-      const ele = document.querySelector(`li[data-index="${firstTodoId}"]`)
-      if (ele) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        ele.style.backgroundColor = 'blue'
-        ele.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }
-    }, 0)
+    setDisplayTodo(() => addOrderIdTodo)
   }, [allTodo])
 
   useEffect(() => {
@@ -132,6 +103,11 @@ export default function TodoList() {
     }
   }, [setObserver])
 
+  const liClassName = cn(
+    'grid grid-cols-[1fr_3fr_1fr_1fr] place-content-center justify-between py-4',
+    `h-[calc(100vh/${DISPLAY_TODO_COUNT})]`
+  )
+
   return (
     <>
       <ol
@@ -139,13 +115,7 @@ export default function TodoList() {
         className="fjalla-one list-outside list-decimal divide-y divide-gray-200"
       >
         {displayTodo.map((todo) => (
-          <li
-            key={todo.id}
-            data-index={todo.orderId}
-            className={cn(
-              'grid h-[calc(100vh/10)] grid-cols-[1fr_3fr_1fr_1fr] place-content-center justify-between py-4'
-            )}
-          >
+          <li key={todo.id} data-index={todo.orderId} className={liClassName}>
             <TodoItem todo={todo} orderId={todo.orderId} />
           </li>
         ))}
