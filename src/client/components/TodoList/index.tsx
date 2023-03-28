@@ -102,13 +102,6 @@ export default function TodoList() {
     }
   }, [setObserver])
 
-  const liClassName = cn(
-    'grid grid-cols-[1fr_3fr_1fr_1fr] place-content-center justify-between py-4',
-    DISPLAY_TODO_COUNT
-      ? `h-[calc(100vh/${DISPLAY_TODO_COUNT})]`
-      : 'h-[calc(100vh/10)]'
-  )
-
   return (
     <>
       <ol
@@ -119,7 +112,9 @@ export default function TodoList() {
           <li
             key={todo.id}
             data-index={todo.orderId}
-            className={liClassName}
+            className={cn(
+              'grid h-[calc(100vh/7)] grid-cols-[1fr_3fr_1fr_1fr] place-content-center justify-between py-4'
+            )}
           >
             <TodoItem todo={todo} orderId={todo.orderId} />
           </li>
