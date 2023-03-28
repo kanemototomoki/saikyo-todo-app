@@ -6,7 +6,7 @@ export default function LogoGlitch1() {
       <div
         className="glitch1"
         style={{
-          backgroundImage: `url(/public/logo_text.svg)`,
+          backgroundImage: `url(./logo_text.svg)`,
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center'
         }}

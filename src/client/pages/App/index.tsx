@@ -34,10 +34,10 @@ function App() {
           )}
         >
           <div
-            className={cn('w-[40cqw] self-center @[640px]/App:max-w-[400px] mt-[30cqh]')}
+            className={cn('w-[40cqw] self-center @[640px]/App:max-w-[400px] mt-[30svh]')}
           >
             <TodoForm />
-            <div className={cn('scale-[.70] grid place-content-center')}>
+            <div className={cn('scale-[.60] grid place-content-center')}>
               <Logo />
             </div>
           </div>

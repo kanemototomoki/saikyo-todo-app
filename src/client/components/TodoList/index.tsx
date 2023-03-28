@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { TodoResponseSchema } from '@server/model';
-import TodoItem from '@client/components/TodoItem';
-import { cn } from '../../lib/utils';
-import { useGetAllTodo } from './useGetAllTodo';
-
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { TodoResponseSchema } from '@server/model'
+import TodoItem from '@client/components/TodoItem'
+import { cn } from '../../lib/utils'
+import { useGetAllTodo } from './useGetAllTodo'
 
 // 画面内に表示するTODOの数
 const DISPLAY_TODO_COUNT = 7
@@ -103,11 +102,6 @@ export default function TodoList() {
     }
   }, [setObserver])
 
-  const liClassName = cn(
-    'grid grid-cols-[1fr_3fr_1fr_1fr] place-content-center justify-between py-4',
-    `h-[calc(100vh/${DISPLAY_TODO_COUNT})]`
-  )
-
   return (
     <>
       <ol
@@ -115,7 +109,13 @@ export default function TodoList() {
         className="fjalla-one list-outside list-decimal divide-y divide-gray-200"
       >
         {displayTodo.map((todo) => (
-          <li key={todo.id} data-index={todo.orderId} className={liClassName}>
+          <li
+            key={todo.id}
+            data-index={todo.orderId}
+            className={cn(
+              'grid h-[calc(100vh/7)] grid-cols-[1fr_3fr_1fr_1fr] place-content-center justify-between py-4'
+            )}
+          >
             <TodoItem todo={todo} orderId={todo.orderId} />
           </li>
         ))}

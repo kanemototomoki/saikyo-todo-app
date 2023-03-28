@@ -53,6 +53,7 @@
   opacity: 0;
   animation: splash-text var(--animation-time) linear forwards
     calc(var(--animation-time) * 2);
+  mix-blend-mode: hard-light;
 }
 
 @keyframes splash-text {
